@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'calender.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -105,12 +107,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double size = MediaQuery.of(context).size.width;
+    double size = MediaQuery.of(context).size.height;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         hoverColor: Colors.red,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => TodoApp()));
+        },
         child: const Icon(
           Icons.arrow_upward_sharp,
           color: Colors.black,
@@ -119,62 +124,64 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.black,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "${getMonth()}",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: size * .06,
+          child: Center(
+            child: Column(
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${getMonth()}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: size * .05,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Text(
-                " ${currentTime.hour}",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: size * .8,
-                  fontWeight: FontWeight.bold,
+                  ],
                 ),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    " 0${currentTime.minute}",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: size * .6,
-                      fontWeight: FontWeight.bold,
-                    ),
+                Text(
+                  " ${currentTime.hour}",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: size * .3,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text(
-                    "${currentTime.second} s",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: size * .04,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
-              ),
-              Text(
-                "${days()}, $year",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: size * .04,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
-            ],
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      " ${currentTime.minute}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: size * .3,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      "${currentTime.second} s",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: size * .02,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  "${days()}, $year",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: size * .03,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
