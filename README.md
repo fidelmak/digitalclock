@@ -1,16 +1,10 @@
 # digitalclock
 
-A new Flutter project.
+A new Flutter digital Android clock  project.
 
-## Getting Started
+## image 
+<img src ="https://github.com/fidelmak/digitalclock/blob/649eb74c7014851135532de06e053681f12b96d3/IMG_wla08e_1.jpg"  height= auto >
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# X post 
+https://twitter.com/DelisIgib/status/1732528502761472416?t=s04fPfx1YO4jc8-aK1G3Pg&s=19
