@@ -24,6 +24,9 @@ class _TodoAppState extends State<TodoApp> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
+              style: TextStyle(
+                color: Colors.white,
+              ),
               controller: todoController,
               decoration: InputDecoration(
                 hintText: 'Enter a new todo...',
@@ -39,7 +42,10 @@ class _TodoAppState extends State<TodoApp> {
             SizedBox(height: 16.0),
             Text(
               'Todo List:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
             SizedBox(height: 8.0),
             Expanded(
@@ -47,7 +53,12 @@ class _TodoAppState extends State<TodoApp> {
                 itemCount: todos.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(todos[index]),
+                    title: Text(
+                      todos[index],
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {

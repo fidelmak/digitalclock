@@ -85,6 +85,10 @@ class _HomePageState extends State<HomePage> {
         return "Thursday";
       case DateTime.friday:
         return "Friday";
+      case DateTime.saturday:
+        return "Saturday";
+      case DateTime.sunday:
+        return "Sunday";
       default:
         return "Some other day";
     }
