@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "24863508380",
+    "project_id": "digital-clock-a3948",
+    "storage_bucket": "digital-clock-a3948.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24863508380:android:1b949179d9f053d4a3ea59",
+        "android_client_info": {
+          "package_name": "com.example.digitalclock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfzpqq1cNeA48ITuiUfywRjOLGxdJSzIo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
