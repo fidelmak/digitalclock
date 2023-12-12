@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -79,12 +78,7 @@ class _TodoAppState extends State<TodoApp> {
 
   Future<void> addTodo(String taskName) async {
     String newTodo = todoController.text.trim();
-    DocumentReference docRef =
-        await FirebaseFirestore.instance.collection('tasks').add(
-      {
-        'taskName': taskName,
-      },
-    );
+
     if (newTodo.isNotEmpty) {
       setState(() {
         todos.add(newTodo);
