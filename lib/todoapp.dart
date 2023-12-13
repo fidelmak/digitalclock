@@ -1,3 +1,4 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -8,6 +9,7 @@ class TodoApp extends StatefulWidget {
 
 class _TodoAppState extends State<TodoApp> {
   List<String> todos = [];
+  late final Databases database;
 
   TextEditingController todoController = TextEditingController();
 
@@ -36,7 +38,7 @@ class _TodoAppState extends State<TodoApp> {
             ElevatedButton(
               onPressed: () {
                 final taskName = todoController.text;
-                addTodo(taskName);
+                addTodos(taskName);
               },
               child: Text('Add Todo'),
             ),
@@ -74,6 +76,29 @@ class _TodoAppState extends State<TodoApp> {
         ),
       ),
     );
+  }
+
+  Future<void> addTodos(String taskName) async {
+    if (taskName.isNotEmpty) {
+      // Create a new document in the Appwrite collection
+      try {
+        await database.createDocument(
+          collectionId:
+              '6578d806e281a763881f', // Replace with your Appwrite collection ID
+          data: {'taskName': "todoTask"}, databaseId: '6578d7e968df3b6957ee',
+          documentId: '6578d806e281a763881f',
+        );
+      } catch (e) {
+        print('Error adding todo: $e');
+        // Handle error, e.g., show a snackbar or display an error message
+      }
+
+      // After successfully adding the todo to the database, update the local state if needed
+      setState(() {
+        todos.add(taskName);
+        todoController.clear();
+      });
+    }
   }
 
   Future<void> addTodo(String taskName) async {
