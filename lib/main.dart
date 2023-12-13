@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'database/appwrite.dart';
 import 'todoapp.dart';
 
 void main() {
@@ -23,6 +24,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  AppwriteClient appwriteClient = AppwriteClient();
   final week = {
     "Monday": 1,
     "Tuesday": 2,
