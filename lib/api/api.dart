@@ -29,4 +29,31 @@ class SQLHELPER {
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;
   }
+
+  static Future<List<Map<String, dynamic>>> getItems() async {
+    final db = await SQLHELPER.db();
+    return db.query('items', orderBy: 'id');
+  }
+
+  static Future<List<Map<String, dynamic>>> getItem(int id) async {
+    final db = await SQLHELPER.db();
+    return db.query('items', where: 'id * ?', whereArgs: [id], limit: 1);
+  }
+
+  static Future<int> updateItem(int id, String title) async {
+    final db = await SQLHELPER.db();
+    final data = {'title': title, 'createdAt': DateTime.now().toString()};
+    final result =
+        await db.update('items', data, where: 'id=?', whereArgs: [id]);
+    return result;
+  }
+
+  static Future<void> deleteItem(int id) async {
+    final db = await SQLHELPER.db();
+    try {
+      await db.delete('items', where: 'id =?', whereArgs: [id]);
+    } catch (err) {
+      debugPrint("something went wrong :$err ");
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'api/api.dart';
 
 class TodoApp extends StatefulWidget {
   @override
@@ -8,10 +9,31 @@ class TodoApp extends StatefulWidget {
 }
 
 class _TodoAppState extends State<TodoApp> {
-  List<String> todos = [];
-  late final Databases database;
+  List<Map<String, dynamic>> _todo = [];
+  bool _isLoading = true;
 
-  TextEditingController todoController = TextEditingController();
+  void _refreshTodo() async {
+    final data = await SQLHELPER.getItems();
+    setState(() {
+      _todo = data;
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshTodo();
+    print("no of ${_todo.length}");
+  }
+
+  final TextEditingController _title = TextEditingController();
+  void _showForm(int? id) async {
+    if (id != null) {
+      final existingTodo = _todo.firstWhere((element) => element['id' == id]);
+      _title.text = existingTodo['title'];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +51,7 @@ class _TodoAppState extends State<TodoApp> {
               style: TextStyle(
                 color: Colors.white,
               ),
-              controller: todoController,
+              controller: _title,
               decoration: InputDecoration(
                 hintText: 'Enter a new todo...',
               ),
@@ -37,7 +59,7 @@ class _TodoAppState extends State<TodoApp> {
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
-                final taskName = todoController.text;
+                final taskName = _title.text;
                 addTodos(taskName);
               },
               child: Text('Add Todo'),
@@ -53,11 +75,11 @@ class _TodoAppState extends State<TodoApp> {
             SizedBox(height: 8.0),
             Expanded(
               child: ListView.builder(
-                itemCount: todos.length,
+                itemCount: _todo.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(
-                      todos[index],
+                      _todo[index] as String,
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -82,12 +104,7 @@ class _TodoAppState extends State<TodoApp> {
     if (taskName.isNotEmpty) {
       // Create a new document in the Appwrite collection
       try {
-        await database.createDocument(
-          collectionId:
-              '6578d806e281a763881f', // Replace with your Appwrite collection ID
-          data: {'taskName': "todoTask"}, databaseId: '6578d7e968df3b6957ee',
-          documentId: '6578d806e281a763881f',
-        );
+        await SQLHELPER.createItem(_title.text);
       } catch (e) {
         print('Error adding todo: $e');
         // Handle error, e.g., show a snackbar or display an error message
@@ -95,26 +112,26 @@ class _TodoAppState extends State<TodoApp> {
 
       // After successfully adding the todo to the database, update the local state if needed
       setState(() {
-        todos.add(taskName);
-        todoController.clear();
+        _todo.add(taskName as Map<String, dynamic>);
+        _title.clear();
       });
     }
   }
 
   Future<void> addTodo(String taskName) async {
-    String newTodo = todoController.text.trim();
+    String newTodo = _title.text.trim();
 
     if (newTodo.isNotEmpty) {
       setState(() {
-        todos.add(newTodo);
-        todoController.clear();
+        _todo.add(newTodo as Map<String, dynamic>);
+        _title.clear();
       });
     }
   }
 
   void deleteTodo(int index) {
     setState(() {
-      todos.removeAt(index);
+      _todo.removeAt(index);
     });
   }
 }
