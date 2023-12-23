@@ -60,7 +60,7 @@ class _TodoAppState extends State<TodoApp> {
             ElevatedButton(
               onPressed: () {
                 final taskName = _title.text;
-                addTodos(taskName);
+                addTodos();
               },
               child: Text('Add Todo'),
             ),
@@ -79,15 +79,20 @@ class _TodoAppState extends State<TodoApp> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(
-                      _todo[index] as String,
+                      _todo[index]['title'].toString(),
                       style: TextStyle(
                         color: Colors.white,
+                        fontSize: 30,
                       ),
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
                       onPressed: () {
                         deleteTodo(index);
+                        print("deleted");
                       },
                     ),
                   );
@@ -100,38 +105,27 @@ class _TodoAppState extends State<TodoApp> {
     );
   }
 
-  Future<void> addTodos(String taskName) async {
-    if (taskName.isNotEmpty) {
-      // Create a new document in the Appwrite collection
-      try {
-        await SQLHELPER.createItem(_title.text);
-      } catch (e) {
-        print('Error adding todo: $e');
-        // Handle error, e.g., show a snackbar or display an error message
-      }
-
-      // After successfully adding the todo to the database, update the local state if needed
-      setState(() {
-        _todo.add(taskName as Map<String, dynamic>);
-        _title.clear();
-      });
+  Future<void> addTodos() async {
+    try {
+      await SQLHELPER.createItem(_title.text);
+    } catch (e) {
+      print('Error adding todo: $e');
     }
-  }
 
-  Future<void> addTodo(String taskName) async {
-    String newTodo = _title.text.trim();
-
-    if (newTodo.isNotEmpty) {
-      setState(() {
-        _todo.add(newTodo as Map<String, dynamic>);
-        _title.clear();
-      });
-    }
-  }
-
-  void deleteTodo(int index) {
     setState(() {
-      _todo.removeAt(index);
+      _title.clear();
+    });
+  }
+
+  Future<void> deleteTodo(int id) async {
+    try {
+      final x = await SQLHELPER.deleteItem(id);
+    } catch (e) {
+      print('Error adding todo: $e');
+    }
+
+    setState(() {
+      _todo.removeWhere((item) => item['id'] == id);
     });
   }
 }
