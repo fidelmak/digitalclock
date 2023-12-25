@@ -1,7 +1,10 @@
 import 'package:appwrite/appwrite.dart';
+import 'package:bottom_bar/bottom_bar.dart';
+import 'package:digitalclock/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'api/api.dart';
+import 'screen.dart';
 
 class TodoApp extends StatefulWidget {
   @override
@@ -24,6 +27,7 @@ class _TodoAppState extends State<TodoApp> {
   void initState() {
     super.initState();
     _refreshTodo();
+
     print("no of ${_todo.length}");
   }
 
@@ -35,71 +39,81 @@ class _TodoAppState extends State<TodoApp> {
     }
   }
 
+  int _currentPage = 0;
+  final _pageController = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomBar(
+          selectedIndex: _currentPage,
+          onTap: (int index) {
+            _pageController.jumpToPage(index);
+            setState(() => _currentPage = index);
+          },
+          items: <BottomBarItem>[
+            BottomBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+              activeColor: Colors.blue,
+            ),
+            BottomBarItem(
+              icon: Icon(Icons.favorite),
+              title: Text('Favorites'),
+              activeColor: Colors.red,
+            ),
+            BottomBarItem(
+              icon: Icon(Icons.person),
+              title: Text('Account'),
+              activeColor: Colors.greenAccent.shade700,
+            ),
+            BottomBarItem(
+              icon: Icon(Icons.settings),
+              title: Text('Settings'),
+              activeColor: Colors.orange,
+            ),
+          ]),
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text('Todo App'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: PageView(
+          controller: _pageController,
+          //crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              style: TextStyle(
-                color: Colors.white,
+            Container(
+              child: Column(
+                children: [
+                  TextField(
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    controller: _title,
+                    decoration: InputDecoration(
+                      hintText: 'Enter a new todo...',
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      final taskName = _title.text;
+                      addTodos();
+                      _showPopup(context);
+                    },
+                    child: Text('Add Todo'),
+                  ),
+                ],
               ),
-              controller: _title,
-              decoration: InputDecoration(
-                hintText: 'Enter a new todo...',
-              ),
             ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                final taskName = _title.text;
-                addTodos();
-              },
-              child: Text('Add Todo'),
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              'Todo List:',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
+            HomePage(),
             SizedBox(height: 8.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _todo.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      _todo[index]['title'].toString(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        deleteTodo(index);
-                        print("deleted");
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
           ],
+          onPageChanged: (index) {
+            // Use a better state management solution
+            // setState is used for simplicity
+            setState(() => _currentPage = index);
+          },
         ),
       ),
     );
@@ -117,15 +131,23 @@ class _TodoAppState extends State<TodoApp> {
     });
   }
 
-  Future<void> deleteTodo(int id) async {
-    try {
-      final x = await SQLHELPER.deleteItem(id);
-    } catch (e) {
-      print('Error adding todo: $e');
-    }
-
-    setState(() {
-      _todo.removeWhere((item) => item['id'] == id);
-    });
+  void _showPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('CREATED SUCESSFULLY'),
+          content: Text('start your list '),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

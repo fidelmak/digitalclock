@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'api/api.dart';
 import 'database/appwrite.dart';
+import 'screen.dart';
 import 'todoapp.dart';
 
 void main() {
@@ -24,7 +26,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  AppwriteClient appwriteClient = AppwriteClient();
   final week = {
     "Monday": 1,
     "Tuesday": 2,
@@ -40,6 +41,7 @@ class _HomePageState extends State<HomePage> {
   final int timethree = DateTime.now().second;
 
   final int year = DateTime.now().year;
+
   String getMonth() {
     final month = DateTime.now().month;
 
@@ -94,6 +96,16 @@ class _HomePageState extends State<HomePage> {
       default:
         return "Some other day";
     }
+  }
+
+  List<Map<String, dynamic>> _todo = [];
+  bool _isLoading = true;
+  Future<void> _refreshTodo() async {
+    final data = await SQLHELPER.getItems();
+    setState(() {
+      _todo = data;
+      _isLoading = false;
+    });
   }
 
   late DateTime currentTime;
@@ -186,6 +198,7 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                SizedBox(height: 60),
               ],
             ),
           ),

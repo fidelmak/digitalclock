@@ -38,6 +38,7 @@ dependencies:
   table_calendar: ^3.0.9
   appwrite: ^11.0.1
   sqflite: ^2.3.0
+  bottom_bar: ^2.0.3
 
 dev_dependencies:
   flutter_test:
