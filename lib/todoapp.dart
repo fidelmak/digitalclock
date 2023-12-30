@@ -66,15 +66,14 @@ class _TodoAppState extends State<TodoApp> {
               title: Text('Account'),
               activeColor: Colors.greenAccent.shade700,
             ),
-            BottomBarItem(
-              icon: Icon(Icons.settings),
-              title: Text('Settings'),
-              activeColor: Colors.orange,
-            ),
           ]),
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Todo App'),
+        title: Text(
+          'Create',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -83,30 +82,59 @@ class _TodoAppState extends State<TodoApp> {
           //crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              child: Column(
+              child: ListView(
                 children: [
-                  TextField(
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                    controller: _title,
-                    decoration: InputDecoration(
-                      hintText: 'Enter a new todo...',
+                  Center(
+                    child: Container(
+                      width: 300,
+                      height: 100,
+                      child: TextField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        controller: _title,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          filled: true,
+                          hintText: 'Enter a new task...',
+                        ),
+                      ),
                     ),
                   ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      final taskName = _title.text;
-                      addTodos();
-                      _showPopup(context);
-                    },
-                    child: Text('Add Todo'),
+                  SizedBox(height: 12.0),
+                  Container(
+                    width: 50.0,
+                    height: 50.0,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final taskName = _title.text;
+                        addTodos();
+                        _showPopup(context);
+                      },
+                      child: Text('Add New Task'),
+                    ),
                   ),
+                  SizedBox(height: 100),
+                  Container(
+                    margin: EdgeInsets.all(20.0),
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Center(
+                        child: Text(
+                      '${_todo.length}',
+                      style: TextStyle(color: Colors.black, fontSize: 100),
+                    )),
+                  )
                 ],
               ),
             ),
-            HomePage(),
+            TodoScreen(),
             SizedBox(height: 8.0),
           ],
           onPageChanged: (index) {
@@ -141,7 +169,8 @@ class _TodoAppState extends State<TodoApp> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TodoScreen()));
               },
               child: Text('Close'),
             ),

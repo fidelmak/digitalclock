@@ -39,26 +39,38 @@ class _TodoScreenState extends State<TodoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text('My Todos'),
-      ),
       backgroundColor: Colors.black,
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: _todo.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_todo[index]['title'].toString()),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
+                return Container(
+                  margin: EdgeInsets.all(20.0),
+                  width: 200,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ListTile(
+                      title: Text(
+                        _todo[index]['title'].toString(),
+                        style: TextStyle(color: Colors.black, fontSize: 40),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(
+                          Icons.cancel,
+                          color: Colors.black,
+                          size: 40,
+                        ),
+                        onPressed: () {
+                          _deleteTodo(_todo[index]['id']);
+                        },
+                      ),
                     ),
-                    onPressed: () {
-                      _deleteTodo(_todo[index]['id']);
-                    },
                   ),
                 );
               },
