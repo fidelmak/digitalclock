@@ -105,15 +105,26 @@ class _TodoAppState extends State<TodoApp> {
                   ),
                   SizedBox(height: 12.0),
                   Container(
-                    width: 50.0,
-                    height: 50.0,
-                    child: ElevatedButton(
+                    child: TextButton(
                       onPressed: () {
                         final taskName = _title.text;
                         addTodos();
                         _showPopup(context);
                       },
-                      child: Text('Add New Task'),
+                      child: Container(
+                        width: 100.0,
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Add',
+                            style: TextStyle(color: Colors.black, fontSize: 30),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(height: 100),
